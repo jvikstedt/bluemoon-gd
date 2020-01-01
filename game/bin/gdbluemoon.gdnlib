@@ -1,0 +1,18 @@
+[general]
+
+singleton=false
+load_once=true
+symbol_prefix="godot_"
+reloadable=true
+
+[entry]
+
+OSX.64="res://bin/osx/libgdbluemoon.dylib"
+Windows.64="res://bin/win64/libgdbluemoon.dll"
+X11.64="res://bin/x11/libgdbluemoon.so"
+
+[dependencies]
+
+OSX.64=[  ]
+Windows.64=[  ]
+X11.64=[ "res://bin/x11/libmbedcrypto.so", "res://bin/x11/libmbedcrypto.so.3", "res://bin/x11/libmbedtls.so", "res://bin/x11/libmbedtls.so.13", "res://bin/x11/libmbedx509.so", "res://bin/x11/libmbedx509.so.1", "res://bin/x11/libsodium.so", "res://bin/x11/libsodium.so.23" ]
