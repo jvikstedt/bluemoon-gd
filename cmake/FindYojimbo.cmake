@@ -1,0 +1,15 @@
+set(YOJIMBO_PATHS
+  yojimbo
+)
+
+find_path(YOJIMBO_INCLUDE_DIR yojimbo.h PATH_SUFFIXES include PATHS ${YOJIMBO_PATHS})
+find_library(YOJIMBO_LIBRARY NAMES yojimbo PATH_SUFFIXES bin PATHS ${YOJIMBO_PATHS})
+
+set(YOJIMBO_LIBRARIES ${YOJIMBO_LIBRARY})
+set(YOJIMBO_INCLUDE_DIRS ${YOJIMBO_INCLUDE_DIR})
+
+include(FindPackageHandleStandardArgs)
+
+find_package_handle_standard_args(yojimbo DEFAULT_MSG YOJIMBO_LIBRARY YOJIMBO_INCLUDE_DIR)
+
+mark_as_advanced(YOJIMBO_INCLUDE_DIR YOJIMBO_LIBRARY)
