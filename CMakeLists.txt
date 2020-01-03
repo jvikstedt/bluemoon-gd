@@ -1,18 +1,20 @@
 cmake_minimum_required(VERSION 3.16)
+project(bluemoon)
 
 set(CMAKE_CXX_STANDARD 14)
 
-project(bluemoon)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 
+find_package(Yojimbo REQUIRED)
+find_package(Mbedtls REQUIRED)
+find_package(Sodium REQUIRED)
 find_library(GODOT_CPP_LIBRARY NAMES godot-cpp.linux.release.64 PATHS godot-cpp/bin)
-find_library(mbedtls NAMES mbedtls)
-find_library(mbedcrypto NAMES mbedcrypto)
-find_library(sodium NAMES sodium)
-find_library(mbedx509 NAMES mbedx509)
 
 ADD_LIBRARY(gdbluemoon SHARED
   src/client/gdbluemoon.cpp
   src/client/library.cpp
+  src/client/GameClient.cpp
+  src/client/logger.cpp
   yojimbo/yojimbo.cpp
   yojimbo/tlsf/tlsf.c
   yojimbo/netcode.io/netcode.c
@@ -32,10 +34,38 @@ target_include_directories(gdbluemoon PRIVATE
 
 target_link_libraries(gdbluemoon
   ${GODOT_CPP_LIBRARY}
-  mbedtls
-  mbedcrypto
-  sodium
-  mbedx509
+  ${MBEDTLS_LIBRARIES}
+  ${SODIUM_LIBRARY}
 )
 
 install(TARGETS gdbluemoon DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/game/bin/x11)
+
+add_executable(bluemoon-server src/server/main.cpp
+  src/server/GameServer.cpp
+  src/server/ServerAdapter.cpp
+)
+
+target_link_libraries(bluemoon-server
+  ${YOJIMBO_LIBRARY}
+  ${MBEDTLS_LIBRARIES}
+  ${SODIUM_LIBRARY}
+)
+
+target_include_directories(bluemoon-server PRIVATE
+  yojimbo
+)
+
+add_executable(bluemoon-client src/client/main.cpp
+  src/client/GameClient.cpp
+  src/client/logger.cpp
+)
+
+target_link_libraries(bluemoon-client
+  ${YOJIMBO_LIBRARY}
+  ${MBEDTLS_LIBRARIES}
+  ${SODIUM_LIBRARY}
+)
+
+target_include_directories(bluemoon-client PRIVATE
+  yojimbo
+)
