@@ -15,6 +15,10 @@ class GameClient {
     float time;
     bool running;
 
+    void ProcessMessages();
+    void ProcessMessage(yojimbo::Message* message);
+    void ProcessPlayerSyncMessage(PlayerSync* message);
+
     ClientAdapter adapter;
     ClientServerConfig connectionConfig;
     yojimbo::Client client;

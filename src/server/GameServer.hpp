@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <yojimbo.h>
 #include "ServerAdapter.hpp"
 #include "../shared/ClientServerConfig.hpp"
@@ -14,6 +15,7 @@ class GameServer {
     void ClientDisconnected(int clientIndex);
 
     void Run();
+    void Stop();
 
   private:
     float time;
@@ -22,12 +24,11 @@ class GameServer {
     ServerAdapter adapter;
     ClientServerConfig connectionConfig;
     yojimbo::Server server;
+    std::vector<Player> players;
 
     void Update(float dt);
 
     void ProcessMessages();
 
     void ProcessMessage(int clientIndex, int channelIndex, yojimbo::Message *message);
-
-    void ProcessTestMessage(int clientIndex, int channelIndex, MyMessage *message);
 };

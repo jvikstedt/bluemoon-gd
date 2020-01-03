@@ -3,6 +3,7 @@
 #include "../shared/ClientServerConfig.hpp"
 #include "ClientAdapter.hpp"
 #include "GameClient.hpp"
+#include "logger.hpp"
 
 const int ServerPort = 40000;
 
@@ -14,7 +15,7 @@ void godot::GDBluemoon::_register_methods() {
 	// register_property<GDBluemoon, String>("data", &GDBluemoon::set_data, &GDBluemoon::get_data, String("Hello world"));
 }
 
-int godot::GDBluemoon::GodotPrint(const char *format, ... ) {
+int godot::GDBluemoon::GodotPrint(const char *format, ...) {
   va_list args;
   int done;
   char buffer[1000];
@@ -32,6 +33,7 @@ void godot::GDBluemoon::_init() {
     printf("error: failed to initialize Yojimbo!\n");
   }
 
+  client_set_printf_function(GodotPrint);
   yojimbo_set_printf_function(GodotPrint);
   yojimbo_log_level(YOJIMBO_LOG_LEVEL_INFO);
 
@@ -46,9 +48,7 @@ void godot::GDBluemoon::_init() {
   uint8_t privateKey[yojimbo::KeyBytes];
   memset(privateKey, 0, yojimbo::KeyBytes);
 
-  // TODO Remove memory
-  gameClient = new GameClient(clientId, serverAddress, privateKey);
-  // GameClient gameClient(clientId, serverAddress, privateKey);
+  gameClient = std::make_unique<GameClient>(clientId, serverAddress, privateKey);
 }
 
 void godot::GDBluemoon::_process(float delta) {

@@ -1,7 +1,9 @@
 #include "GameClient.hpp"
 #include <iostream>
 #include <string>
-#include "../shared/MyMessage.hpp"
+#include "logger.hpp"
+
+#include "../shared/PlayerSync.hpp"
 
 GameClient::GameClient(uint64_t clientId, const yojimbo::Address &serverAddress, const uint8_t privateKey[yojimbo::KeyBytes]) :
         time(0.0f),
@@ -24,18 +26,51 @@ void GameClient::Update(float delta) {
   double previousTime = client.GetTime();
 
   time = time + delta;
-  if (time  < (previousTime + 1/5)) {
+  if (time  < (previousTime + 1)) {
     return;
   }
+
+  client_printf("%f\n", time);
 
   client.AdvanceTime(time);
   client.ReceivePackets();
 
   if (client.IsConnected()) {
-    MyMessage* message = (MyMessage*)client.CreateMessage((int)GameMessageType::TEST);
-    message->m_data = 42;
-    client.SendMessage((int)GameChannel::RELIABLE, message);
+    ProcessMessages();
+    // MyMessage* message = (MyMessage*)client.CreateMessage((int)GameMessageType::TEST);
+    // message->m_data = 42;
+    // client.SendMessage((int)GameChannel::RELIABLE, message);
   }
 
   client.SendPackets();
+}
+
+void GameClient::ProcessMessages() {
+  for (int i = 0; i < connectionConfig.numChannels; i++) {
+    yojimbo::Message *message = client.ReceiveMessage(i);
+    while (message != NULL) {
+      ProcessMessage(message);
+      client.ReleaseMessage(message);
+      message = client.ReceiveMessage(i);
+    }
+  }
+}
+
+void GameClient::ProcessMessage(yojimbo::Message* message) {
+  switch (message->GetType()) {
+    case (int)GameMessageType::PLAYER_SYNC:
+      ProcessPlayerSyncMessage((PlayerSync*)message);
+      break;
+    default:
+      break;
+  }
+}
+
+void GameClient::ProcessPlayerSyncMessage(PlayerSync* message) {
+  int playersSize = message->players.size();
+  client_printf("Received PlayerSync with %d players\n", playersSize);
+  for (int i = 0; i < playersSize; i++) {
+    Player p = message->players[i];
+    client_printf("Player(%d) x: %f y: %f\n", p.id, p.x, p.y);
+  }
 }

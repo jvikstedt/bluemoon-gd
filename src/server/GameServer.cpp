@@ -1,6 +1,8 @@
-#include "GameServer.hpp"
 #include <iostream>
 #include <string>
+#include <algorithm>
+
+#include "GameServer.hpp"
 
 static const int MAX_PLAYERS = 8;
 
@@ -23,14 +25,38 @@ GameServer::GameServer(const yojimbo::Address &address, const uint8_t privateKey
 
 void GameServer::ClientConnected(int clientIndex) {
   std::cout << "client " << clientIndex << " connected" << std::endl;
+
+  players.push_back(Player(clientIndex, 50 + clientIndex * 50, 50));
+
+  for (int i = 0; i < players.size(); i++) {
+    Player p = players[i];
+
+    PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
+    playerSync->players = players;
+    server.SendMessage(p.id, (int)GameChannel::RELIABLE, playerSync);
+  }
 }
 
 void GameServer::ClientDisconnected(int clientIndex) {
   std::cout << "client " << clientIndex << " disconnected" << std::endl;
+
+  players.erase(
+    std::remove_if(players.begin(), players.end(),
+        [clientIndex](const Player & p) { return p.id == clientIndex; }),
+    players.end());
+
+  for (int i = 0; i < players.size(); i++) {
+    Player p = players[i];
+
+    PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
+    playerSync->players = players;
+    server.SendMessage(p.id, (int)GameChannel::RELIABLE, playerSync);
+  }
 }
 
 void GameServer::Run() {
-  float fixedDt = 1.0f / 10.0f;
+  // float fixedDt = 1.0f / 10.0f;
+  float fixedDt = 1.0f;
   while (running) {
     double currentTime = yojimbo_time();
     if (time <= currentTime) {
@@ -57,6 +83,11 @@ void GameServer::Update(float dt) {
   // ... update game ...
   // ... send game state to clients ...
 
+  // std::vector<Player> pp;
+  // pp.push_back(Player(0, 50 + 0 * 50, 50));
+  // PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(0, (int)GameMessageType::PLAYER_SYNC);
+  // playerSync->players = players;
+  // server.SendMessage(0, (int)GameChannel::RELIABLE, playerSync);
 
   server.SendPackets();
 }
@@ -78,18 +109,22 @@ void GameServer::ProcessMessages() {
 
 void GameServer::ProcessMessage(int clientIndex, int channelIndex, yojimbo::Message *message) {
   switch (message->GetType()) {
-    case (int) GameMessageType::TEST:
-      ProcessTestMessage(clientIndex, channelIndex, (MyMessage*) message);
-      break;
+    // case (int) GameMessageType::TEST:
+    //   ProcessTestMessage(clientIndex, (MyMessage*) message);
+    //   break;
     default:
       break;
   }
 }
 
-void GameServer::ProcessTestMessage(int clientIndex, int channelIndex, MyMessage *message) {
-  printf("Client index %d sent message %d\n", clientIndex, message->m_data);
-  // auto respond = (MyMessage*) server.CreateMessage(clientIndex, (int) GameMessageType::TEST);
-  // respond->m_data = 100;
+// void GameServer::ProcessTestMessage(int clientIndex, MyMessage *message) {
+//   printf("Client index %d sent message %d\n", clientIndex, message->m_data);
+//   // auto respond = (MyMessage*) server.CreateMessage(clientIndex, (int) GameMessageType::TEST);
+//   // respond->m_data = 100;
+//
+//   // server.SendMessage(clientIndex, channelIndex, respond);
+// }
 
-  // server.SendMessage(clientIndex, channelIndex, respond);
+void GameServer::Stop() {
+  server.Stop();
 }

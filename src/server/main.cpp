@@ -1,8 +1,17 @@
 #include <iostream>
-#include "GameServer.hpp"
+#include <signal.h>
 #include <yojimbo.h>
+#include "GameServer.hpp"
 
 const int ServerPort = 40000;
+
+GameServer* server;
+
+void interrupt_handler(int) {
+  if (server != nullptr) {
+    server->Stop();
+  }
+}
 
 int main() {
   if (!InitializeYojimbo()) {
@@ -10,15 +19,17 @@ int main() {
     return 1;
   }
 
-  yojimbo_log_level(YOJIMBO_LOG_LEVEL_INFO);
+  signal(SIGINT, interrupt_handler);
+
+  yojimbo_log_level(YOJIMBO_LOG_LEVEL_DEBUG);
 
   srand((unsigned int) time( NULL ));
 
   uint8_t privateKey[yojimbo::KeyBytes];
   memset(privateKey, 0, yojimbo::KeyBytes);
-
-  GameServer server(yojimbo::Address("127.0.0.1", ServerPort), privateKey);
-  server.Run();
+  GameServer gameServer(yojimbo::Address("127.0.0.1", ServerPort), privateKey);
+  server = &gameServer;
+  server->Run();
 
   ShutdownYojimbo();
 

@@ -14,6 +14,7 @@ ADD_LIBRARY(gdbluemoon SHARED
   src/client/gdbluemoon.cpp
   src/client/library.cpp
   src/client/GameClient.cpp
+  src/client/logger.cpp
   yojimbo/yojimbo.cpp
   yojimbo/tlsf/tlsf.c
   yojimbo/netcode.io/netcode.c
@@ -54,9 +55,9 @@ target_include_directories(bluemoon-server PRIVATE
   yojimbo
 )
 
-
 add_executable(bluemoon-client src/client/main.cpp
   src/client/GameClient.cpp
+  src/client/logger.cpp
 )
 
 target_link_libraries(bluemoon-client
