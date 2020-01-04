@@ -38,39 +38,38 @@ int main() {
   uint8_t privateKey[yojimbo::KeyBytes];
   memset(privateKey, 0, yojimbo::KeyBytes);
 
-  // TODO Remember to delete this from memory
-  GameClient gameClient(clientId, serverAddress, privateKey);
-  gameClient.Update(0.0f);
+  // GameClient gameClient(clientId, serverAddress, privateKey);
+  // gameClient.Update(0.0f);
 
-  usleep(1000000);
+  // usleep(1000000);
 
-  gameClient.Update(0.5f);
+  // gameClient.Update(0.5f);
 
-  usleep(1000000);
+  // usleep(1000000);
 
-  gameClient.Update(0.5f);
+  // gameClient.Update(0.5f);
 
-  usleep(1000000);
-  gameClient.Update(0.5f);
+  // usleep(1000000);
+  // gameClient.Update(0.5f);
 
-  usleep(1000000);
-  gameClient.Update(0.5f);
+  // usleep(1000000);
+  // gameClient.Update(0.5f);
 
-  usleep(1000000);
-  gameClient.Update(0.5f);
+  // usleep(1000000);
+  // gameClient.Update(0.5f);
 
-  usleep(1000000);
-  gameClient.Update(0.5f);
+  // usleep(1000000);
+  // gameClient.Update(0.5f);
 
-  usleep(1000000);
-  gameClient.Update(0.5f);
+  // usleep(1000000);
+  // gameClient.Update(0.5f);
 
-  usleep(1000000);
-  gameClient.Update(0.5f);
+  // usleep(1000000);
+  // gameClient.Update(0.5f);
 
-  usleep(1000000);
+  // usleep(1000000);
 
-  gameClient.Disconnect();
+  // gameClient.Disconnect();
 
   return 0;
 }

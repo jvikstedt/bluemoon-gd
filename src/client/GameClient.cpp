@@ -5,10 +5,11 @@
 
 #include "../shared/PlayerSync.hpp"
 
-GameClient::GameClient(uint64_t clientId, const yojimbo::Address &serverAddress, const uint8_t privateKey[yojimbo::KeyBytes]) :
+GameClient::GameClient(uint64_t clientId, const yojimbo::Address &serverAddress, const uint8_t privateKey[yojimbo::KeyBytes], MessageHandler* messageHandler) :
         time(0.0f),
         running(true),
         adapter(),
+        messageHandler(messageHandler),
         client(yojimbo::GetDefaultAllocator(), yojimbo::Address("0.0.0.0"), connectionConfig, adapter, time) {
 
   client.InsecureConnect(privateKey, clientId, serverAddress);
@@ -30,7 +31,7 @@ void GameClient::Update(float delta) {
     return;
   }
 
-  client_printf("%f\n", time);
+  // client_printf("%f\n", time);
 
   client.AdvanceTime(time);
   client.ReceivePackets();
@@ -59,7 +60,8 @@ void GameClient::ProcessMessages() {
 void GameClient::ProcessMessage(yojimbo::Message* message) {
   switch (message->GetType()) {
     case (int)GameMessageType::PLAYER_SYNC:
-      ProcessPlayerSyncMessage((PlayerSync*)message);
+      // ProcessPlayerSyncMessage((PlayerSync*)message);
+      messageHandler->PlayerSyncMsg((PlayerSync*)message);
       break;
     default:
       break;

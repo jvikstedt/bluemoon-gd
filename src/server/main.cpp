@@ -21,7 +21,7 @@ int main() {
 
   signal(SIGINT, interrupt_handler);
 
-  yojimbo_log_level(YOJIMBO_LOG_LEVEL_DEBUG);
+  yojimbo_log_level(YOJIMBO_LOG_LEVEL_INFO);
 
   srand((unsigned int) time( NULL ));
 

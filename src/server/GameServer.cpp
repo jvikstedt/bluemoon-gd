@@ -28,13 +28,13 @@ void GameServer::ClientConnected(int clientIndex) {
 
   players.push_back(Player(clientIndex, 50 + clientIndex * 50, 50));
 
-  for (int i = 0; i < players.size(); i++) {
-    Player p = players[i];
+  // for (int i = 0; i < players.size(); i++) {
+  //   Player p = players[i];
 
-    PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
-    playerSync->players = players;
-    server.SendMessage(p.id, (int)GameChannel::RELIABLE, playerSync);
-  }
+  //   PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
+  //   playerSync->players = players;
+  //   server.SendMessage(p.id, (int)GameChannel::RELIABLE, playerSync);
+  // }
 }
 
 void GameServer::ClientDisconnected(int clientIndex) {
@@ -45,13 +45,13 @@ void GameServer::ClientDisconnected(int clientIndex) {
         [clientIndex](const Player & p) { return p.id == clientIndex; }),
     players.end());
 
-  for (int i = 0; i < players.size(); i++) {
-    Player p = players[i];
+  // for (int i = 0; i < players.size(); i++) {
+  //   Player p = players[i];
 
-    PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
-    playerSync->players = players;
-    server.SendMessage(p.id, (int)GameChannel::RELIABLE, playerSync);
-  }
+  //   PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
+  //   playerSync->players = players;
+  //   server.SendMessage(p.id, (int)GameChannel::RELIABLE, playerSync);
+  // }
 }
 
 void GameServer::Run() {
@@ -78,6 +78,15 @@ void GameServer::Update(float dt) {
   server.ReceivePackets();
   ProcessMessages();
 
+  for (int i = 0; i < players.size(); i++) {
+    Player& p = players[i];
+    p.x += 20;
+    p.y += 20;
+
+    PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
+    playerSync->players = players;
+    server.SendMessage(p.id, (int)GameChannel::UNRELIABLE, playerSync);
+  }
 
   // ... process client inputs ...
   // ... update game ...

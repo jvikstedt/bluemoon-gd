@@ -5,11 +5,10 @@
 #include <Node2D.hpp>
 #include <yojimbo.h>
 #include "GameClient.hpp"
+#include "MessageHandler.hpp"
 
-namespace godot {
-
-class GDBluemoon : public Node2D {
-	GODOT_CLASS(GDBluemoon, Node2D)
+class GDBluemoon : public godot::Node2D, MessageHandler {
+  GODOT_CLASS(GDBluemoon, Node2D)
 
 private:
   std::unique_ptr<GameClient> gameClient;
@@ -17,10 +16,11 @@ private:
   static int GodotPrint(const char *format, ... );
 
 public:
-	static void _register_methods();
+  static void _register_methods();
 
-	void _init();
+  void _init();
   void _process(float delta);
-};
+  void _ready();
 
-}
+  void PlayerSyncMsg(PlayerSync* playerSync) override;
+};
