@@ -11,8 +11,8 @@ find_package(Sodium REQUIRED)
 find_library(GODOT_CPP_LIBRARY NAMES godot-cpp.linux.release.64 PATHS godot-cpp/bin)
 
 ADD_LIBRARY(gdbluemoon SHARED
-  src/client/gdbluemoon.cpp
-  src/client/library.cpp
+  src/gd/gdbluemoon.cpp
+  src/gd/library.cpp
   src/client/GameClient.cpp
   src/client/logger.cpp
   yojimbo/yojimbo.cpp

@@ -1,9 +1,9 @@
 #include <yojimbo.h>
 #include "gdbluemoon.hpp"
 #include "../shared/ClientServerConfig.hpp"
-#include "ClientAdapter.hpp"
-#include "GameClient.hpp"
-#include "logger.hpp"
+#include "../client/ClientAdapter.hpp"
+#include "../client/GameClient.hpp"
+#include "../client/logger.hpp"
 #include <ResourceLoader.hpp>
 #include <PackedScene.hpp>
 #include <String.hpp>

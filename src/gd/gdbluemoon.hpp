@@ -4,8 +4,8 @@
 #include <Godot.hpp>
 #include <Node2D.hpp>
 #include <yojimbo.h>
-#include "GameClient.hpp"
-#include "MessageHandler.hpp"
+#include "../client/GameClient.hpp"
+#include "../client/MessageHandler.hpp"
 
 class GDBluemoon : public godot::Node2D, MessageHandler {
   GODOT_CLASS(GDBluemoon, Node2D)
