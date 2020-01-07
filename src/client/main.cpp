@@ -27,7 +27,7 @@ int main() {
   yojimbo_set_printf_function(a_printf);
   yojimbo_log_level(YOJIMBO_LOG_LEVEL_DEBUG);
 
-  srand((unsigned int) time(NULL));
+  srand((unsigned int) time(nullptr));
 
   double time = 100.0;
   uint64_t clientId = 0;

@@ -2,13 +2,13 @@
 #include "GameServer.hpp"
 
 void ServerAdapter::OnServerClientConnected(int clientIndex) {
-  if (server != NULL) {
+  if (server != nullptr) {
     server->ClientConnected(clientIndex);
   }
 }
 
 void ServerAdapter::OnServerClientDisconnected(int clientIndex) {
-  if (server != NULL) {
+  if (server != nullptr) {
     server->ClientDisconnected(clientIndex);
   }
 }

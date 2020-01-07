@@ -106,7 +106,7 @@ void GameServer::ProcessMessages() {
     if (server.IsClientConnected(i)) {
       for (int j = 0; j < connectionConfig.numChannels; j++) {
         yojimbo::Message *message = server.ReceiveMessage(i, j);
-        while (message != NULL) {
+        while (message != nullptr) {
           ProcessMessage(i, j, message);
           server.ReleaseMessage(i, message);
           message = server.ReceiveMessage(i, j);

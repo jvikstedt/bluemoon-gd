@@ -22,5 +22,5 @@ public:
   void _process(float delta);
   void _ready();
 
-  void PlayerSyncMsg(PlayerSync* playerSync) override;
+  void HandleMessage(const yojimbo::Message &message) override;
 };

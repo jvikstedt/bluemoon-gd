@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../shared/PlayerSync.hpp"
+#include <yojimbo.h>
 
 class MessageHandler {
 public:
-  virtual void PlayerSyncMsg(PlayerSync* playerSync) = 0;
+  virtual void HandleMessage(const yojimbo::Message &message) = 0;
 };

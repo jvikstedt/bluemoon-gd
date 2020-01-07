@@ -7,13 +7,14 @@
 
 class GameClient {
   public:
-    explicit GameClient(uint64_t clientId, const yojimbo::Address &serverAddress, const uint8_t privateKey[yojimbo::KeyBytes], MessageHandler* messageHandler);
+    explicit GameClient(uint64_t clientId, int tickrate, const yojimbo::Address &serverAddress, const uint8_t privateKey[yojimbo::KeyBytes], MessageHandler* messageHandler);
     void Update(float delta);
-    bool IsConnected();
+    bool IsConnected() const;
     void Disconnect();
 
   private:
-    float time;
+    float timePassed;
+    int tickrate;
     bool running;
 
     void ProcessMessages();

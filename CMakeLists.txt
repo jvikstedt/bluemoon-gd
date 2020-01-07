@@ -8,6 +8,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 find_package(Yojimbo REQUIRED)
 find_package(Mbedtls REQUIRED)
 find_package(Sodium REQUIRED)
+
+# TODO Fix to support crossplatform
 find_library(GODOT_CPP_LIBRARY NAMES godot-cpp.linux.release.64 PATHS godot-cpp/bin)
 
 ADD_LIBRARY(gdbluemoon SHARED

@@ -7,7 +7,7 @@ class GameServer;
 
 class ServerAdapter : public yojimbo::Adapter {
 public:
-  explicit ServerAdapter(GameServer *server = NULL) {
+  explicit ServerAdapter(GameServer *server = nullptr) {
     this->server = server;
   }
 
