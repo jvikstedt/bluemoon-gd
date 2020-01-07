@@ -13,7 +13,7 @@ void GDBluemoon::_register_methods() {
 int GDBluemoon::GodotPrint(const char *format, ...) {
   va_list args;
   int done;
-  char buffer[1000];
+  char buffer[4*1024];
 
   va_start(args, format);
   done = vsnprintf(buffer, sizeof(buffer), format, args);
@@ -58,8 +58,17 @@ void GDBluemoon::_process(float delta) {
   gameClient->Update(delta);
 }
 
-void GDBluemoon::HandleMessage(const yojimbo::Message &message) {
-  GodotPrint("received message of type: %d\n", message.GetType());
+void GDBluemoon::HandleMessage(const yojimbo::Message* message) {
+  GodotPrint("received message of type: %d\n", message->GetType());
+  switch (message->GetType()) {
+    case (int)GameMessageType::ENTITY_SYNC:
+      // ProcessPlayerSyncMessage((PlayerSync*)message);
+      EntitySync* entitySync = (EntitySync*)message;
+      for (auto entity : entitySync->entities) {
+        GodotPrint("%d %d %f %f\n", entity->type, entity->id, entity->x, entity->y);
+      }
+      break;
+  }
 }
 
 // #include <ResourceLoader.hpp>

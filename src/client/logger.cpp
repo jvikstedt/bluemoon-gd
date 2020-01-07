@@ -11,6 +11,6 @@ void client_printf(const char* format, ...) {
   va_start(args, format);
   char buffer[4*1024];
   vsprintf(buffer, format, args);
-  client_printf_function( "%s", buffer);
+  client_printf_function("%s", buffer);
   va_end(args);
 }

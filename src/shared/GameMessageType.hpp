@@ -1,6 +1,6 @@
 #pragma once
 
 enum class GameMessageType {
-  PLAYER_SYNC,
+  ENTITY_SYNC,
   COUNT
 };

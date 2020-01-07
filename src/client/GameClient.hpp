@@ -19,7 +19,6 @@ class GameClient {
 
     void ProcessMessages();
     void ProcessMessage(yojimbo::Message* message);
-    void ProcessPlayerSyncMessage(PlayerSync* message);
 
     ClientAdapter adapter;
     ClientServerConfig connectionConfig;

@@ -22,5 +22,5 @@ public:
   void _process(float delta);
   void _ready();
 
-  void HandleMessage(const yojimbo::Message &message) override;
+  void HandleMessage(const yojimbo::Message* message) override;
 };

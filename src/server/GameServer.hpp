@@ -24,7 +24,7 @@ class GameServer {
     ServerAdapter adapter;
     ClientServerConfig connectionConfig;
     yojimbo::Server server;
-    std::vector<Player> players;
+    std::vector<std::shared_ptr<Entity>> entities;
 
     void Update(float dt);
 

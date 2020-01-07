@@ -26,7 +26,10 @@ GameServer::GameServer(const yojimbo::Address &address, const uint8_t privateKey
 void GameServer::ClientConnected(int clientIndex) {
   std::cout << "client " << clientIndex << " connected" << std::endl;
 
-  players.push_back(Player(clientIndex, 50 + clientIndex * 50, 50));
+  auto entity = std::make_shared<Character>(clientIndex, 50 + clientIndex * 50, 50);
+  entities.push_back(entity);
+
+  // players.push_back(Player(clientIndex, 50 + clientIndex * 50, 50));
 
   // for (int i = 0; i < players.size(); i++) {
   //   Player p = players[i];
@@ -40,10 +43,10 @@ void GameServer::ClientConnected(int clientIndex) {
 void GameServer::ClientDisconnected(int clientIndex) {
   std::cout << "client " << clientIndex << " disconnected" << std::endl;
 
-  players.erase(
-    std::remove_if(players.begin(), players.end(),
-        [clientIndex](const Player & p) { return p.id == clientIndex; }),
-    players.end());
+  // players.erase(
+  //   std::remove_if(players.begin(), players.end(),
+  //       [clientIndex](const Player & p) { return p.id == clientIndex; }),
+  //   players.end());
 
   // for (int i = 0; i < players.size(); i++) {
   //   Player p = players[i];
@@ -78,15 +81,23 @@ void GameServer::Update(float dt) {
   server.ReceivePackets();
   ProcessMessages();
 
-  for (int i = 0; i < players.size(); i++) {
-    Player& p = players[i];
-    p.x += 20;
-    p.y += 20;
-
-    PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
-    playerSync->players = players;
-    server.SendMessage(p.id, (int)GameChannel::UNRELIABLE, playerSync);
+  for (int i = 0; i < MAX_PLAYERS; i++) {
+    if (server.IsClientConnected(i)) {
+      EntitySync* entitySync = (EntitySync*)server.CreateMessage(i, (int)GameMessageType::ENTITY_SYNC);
+      entitySync->entities = entities;
+      server.SendMessage(i, (int)GameChannel::UNRELIABLE, entitySync);
+    }
   }
+
+  // for (int i = 0; i < players.size(); i++) {
+  //   Player& p = players[i];
+  //   p.x += 20;
+  //   p.y += 20;
+
+  //   PlayerSync* playerSync = (PlayerSync*)server.CreateMessage(p.id, (int)GameMessageType::PLAYER_SYNC);
+  //   playerSync->players = players;
+  //   server.SendMessage(p.id, (int)GameChannel::UNRELIABLE, playerSync);
+  // }
 
   // ... process client inputs ...
   // ... update game ...

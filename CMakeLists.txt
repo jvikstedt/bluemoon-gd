@@ -17,6 +17,8 @@ ADD_LIBRARY(gdbluemoon SHARED
   src/gd/library.cpp
   src/client/GameClient.cpp
   src/client/logger.cpp
+  src/shared/Entity.cpp
+  src/shared/Character.cpp
   yojimbo/yojimbo.cpp
   yojimbo/tlsf/tlsf.c
   yojimbo/netcode.io/netcode.c
@@ -45,6 +47,8 @@ install(TARGETS gdbluemoon DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/game/bin/x11)
 add_executable(bluemoon-server src/server/main.cpp
   src/server/GameServer.cpp
   src/server/ServerAdapter.cpp
+  src/shared/Entity.cpp
+  src/shared/Character.cpp
 )
 
 target_link_libraries(bluemoon-server
@@ -60,6 +64,8 @@ target_include_directories(bluemoon-server PRIVATE
 add_executable(bluemoon-client src/client/main.cpp
   src/client/GameClient.cpp
   src/client/logger.cpp
+  src/shared/Entity.cpp
+  src/shared/Character.cpp
 )
 
 target_link_libraries(bluemoon-client

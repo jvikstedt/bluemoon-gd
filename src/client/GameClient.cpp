@@ -49,7 +49,7 @@ void GameClient::ProcessMessages() {
   for (int i = 0; i < connectionConfig.numChannels; i++) {
     yojimbo::Message *message = client.ReceiveMessage(i);
     while (message != nullptr) {
-      messageHandler->HandleMessage(*message);
+      messageHandler->HandleMessage(message);
       client.ReleaseMessage(message);
       message = client.ReceiveMessage(i);
     }

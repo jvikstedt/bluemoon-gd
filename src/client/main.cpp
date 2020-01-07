@@ -1,7 +1,10 @@
+#include <memory>
 #include <iostream>
 #include "GameClient.hpp"
 #include <yojimbo.h>
 #include <unistd.h>
+#include "../shared/Entity.hpp"
+#include "../shared/Character.hpp"
 
 const int ServerPort = 40000;
 
@@ -70,6 +73,10 @@ int main() {
   // usleep(1000000);
 
   // gameClient.Disconnect();
+
+  std::shared_ptr<Entity> entity = std::make_shared<Character>(1, 50.0f, 50.0f);
+
+  std::printf("%d %d %f %f\n", entity->type, entity->id, entity->x, entity->y);
 
   return 0;
 }

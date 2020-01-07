@@ -4,5 +4,5 @@
 
 class MessageHandler {
 public:
-  virtual void HandleMessage(const yojimbo::Message &message) = 0;
+  virtual void HandleMessage(const yojimbo::Message* message) = 0;
 };
