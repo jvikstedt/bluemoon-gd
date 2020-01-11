@@ -26,12 +26,8 @@ public:
 
         serialize_int(stream, entitiesSize, 0, 512);
         for (int i = 0; i < entitiesSize; i++) {
-          serialize_int(stream, type, 0, 512);
-          serialize_int(stream, id, 0, 512);
-          serialize_float(stream, x);
-          serialize_float(stream, y);
-
           auto entity = std::make_shared<Character>(id, x, y);
+          entity->SerializeInternal(stream);
           entities.push_back(entity);
         }
       }
@@ -39,15 +35,7 @@ public:
         int entitiesSize = entities.size();
         serialize_int(stream, entitiesSize, 0, 512);
         for (int i = 0; i < entitiesSize; i++) {
-          int type = entities[i]->type;
-          int id = entities[i]->id;
-          float x = entities[i]->x;
-          float y = entities[i]->y;
-
-          serialize_int(stream, type, 0, 512);
-          serialize_int(stream, id, 0, 512);
-          serialize_float(stream, x);
-          serialize_float(stream, y);
+          entities[i]->SerializeInternal(stream);
         }
       }
       return true;

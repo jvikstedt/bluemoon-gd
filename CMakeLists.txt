@@ -77,3 +77,9 @@ target_link_libraries(bluemoon-client
 target_include_directories(bluemoon-client PRIVATE
   yojimbo
 )
+
+add_executable(bluemoon-world src/world/main.cpp
+  src/world/world.cpp
+  src/world/node.cpp
+  src/world/entity.cpp
+)

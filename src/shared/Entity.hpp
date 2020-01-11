@@ -1,6 +1,8 @@
 #pragma once
 
-class Entity {
+#include <yojimbo.h>
+
+class Entity : public yojimbo::Serializable {
 public:
   int type;
   int id;
@@ -10,6 +12,7 @@ public:
   explicit Entity(int type, int id, float x, float y);
   void Update(float delta);
 
-  template <typename Stream>
-  bool Serialize(Stream& stream);
+  virtual bool SerializeInternal(yojimbo::ReadStream & stream) = 0;
+  virtual bool SerializeInternal(yojimbo::WriteStream & stream) = 0;
+  virtual bool SerializeInternal(yojimbo::MeasureStream & stream) = 0;
 };
